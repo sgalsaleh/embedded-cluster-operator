@@ -130,7 +130,7 @@ run: manifests fmt vet ## Run a controller from your host.
 # More info: https://docs.docker.com/develop/develop-images/build_enhancements/
 .PHONY: docker-build
 docker-build: test ## Build docker image with the manager.
-	docker build --platform linux/amd64 -t ${IMG} .
+	docker build --platform linux/arm64 -t ${IMG} .
 
 .PHONY: docker-push
 docker-push: ## Push docker image with the manager.
@@ -334,14 +334,14 @@ $(MELANGE_CACHE_DIR):
 	mkdir -p $(MELANGE_CACHE_DIR)
 
 .PHONY: apko-build
-apko-build: export ARCHS ?= amd64
+apko-build: export ARCHS ?= arm64
 apko-build: check-env-IMAGE apko-template
 	cd build && ${APKO_CMD} \
 		build apko.yaml ${IMAGE} apko.tar \
 		--arch ${ARCHS}
 
 .PHONY: apko-build-and-publish
-apko-build-and-publish: export ARCHS ?= amd64
+apko-build-and-publish: export ARCHS ?= arm64
 apko-build-and-publish: check-env-IMAGE apko-template
 	cd build && ${APKO_CMD} \
 		publish apko.yaml ${IMAGE} \
@@ -356,7 +356,7 @@ apko-login:
 		--password "${PASSWORD}" "${REGISTRY}"
 
 .PHONY: melange-build
-melange-build: export ARCHS ?= amd64
+melange-build: export ARCHS ?= arm64
 melange-build: $(MELANGE_CACHE_DIR) melange-template
 	${MELANGE_CMD} \
 		keygen build/melange.rsa
